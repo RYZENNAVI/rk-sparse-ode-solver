@@ -1,0 +1,29 @@
+TARGETS = genmat gencrs gencrs_new gendia rk rk_new rk_new_last geninit vis vis_new
+OBJECTS = $(TARGETS:=.o) graphlib.o
+
+CC = g++
+CCFLAGS = -g -O2 -lm -ldl -Wall -Wextra  -fopenmp -fsanitize=address,undefined 
+
+.PHONY:	all
+all:	$(TARGETS)
+
+vis:	vis.o graphlib.o
+	$(CC) $(CCFLAGS) $^ -o $@
+
+MasterEquation:	MasterEquation.o graphlib.o
+	$(CC) $(CCFLAGS) $^ -o $@
+
+%:	%.c
+	$(CC) $(CCFLAGS) $^ -o $@
+
+%.o:	%.c
+	$(CC) $(CCFLAGS) $^ -c -o $@
+
+.PHONY:	clean
+clean:
+	-$(RM) $(TARGETS)
+	-$(RM) $(OBJECTS)
+
+.PHONY:	realclean
+realclean:	clean
+	-$(RM) *~
